@@ -8,5 +8,5 @@
     <string name="geofence_transition_entered">grofence transition entered</string>
     <string name="geofence_transition_exited">geofence transition exited</string>
     <string name="unknown_geofence_transition">unknown geofence transition</string>
-    <string name="geofence_transition_notification_text">geofence transition notification text</string>
+    <string name="geofence_transition_notification_text">MIT Ab5 entered</string>
 </resources>

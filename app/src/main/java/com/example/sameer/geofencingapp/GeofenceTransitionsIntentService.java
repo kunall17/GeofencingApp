@@ -29,11 +29,12 @@ import static android.content.ContentValues.TAG;
 public class GeofenceTransitionsIntentService extends IntentService {
 
     Resources mResources = getApplication().getResources();
+
     public GeofenceTransitionsIntentService(String name) {
         super(name);
     }
 
-    public GeofenceTransitionsIntentService(){
+    public GeofenceTransitionsIntentService() {
         super("Default Constructor in Geofence Transitions Intent Service");
     }
 
@@ -47,11 +48,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
             return;
         }
 
-
-
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
-
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
@@ -66,42 +64,25 @@ public class GeofenceTransitionsIntentService extends IntentService {
             // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
-        }
-        else {
+        } else {
             // Log the error.
             Log.e(TAG, "Hello");
         }
     }
 
     private String getGeofenceTransitionDetails(Context context, int geofenceTransition, List<Geofence> triggeringGeofences) {
-
-        String geofenceTransitionString = getTransitionString(geofenceTransition);
-
         // Get the Ids of each geofence that was triggered.
-        ArrayList triggeringGeofencesIdsList = new ArrayList();
+        ArrayList<String> triggeringGeofencesIdsList = new ArrayList<String>();
         for (Geofence geofence : triggeringGeofences) {
             triggeringGeofencesIdsList.add(geofence.getRequestId());
         }
-        String triggeringGeofencesIdsString = TextUtils.join(", ", triggeringGeofencesIdsList);
-
-        return geofenceTransitionString + ": " + triggeringGeofencesIdsString;
-    }
-
-    private String getTransitionString(int transitionType) {
-        switch (transitionType) {
-            case Geofence.GEOFENCE_TRANSITION_ENTER:
-                return getString(R.string.geofence_transition_entered);
-            case Geofence.GEOFENCE_TRANSITION_EXIT:
-                return getString(R.string.geofence_transition_exited);
-            default:
-                return getString(R.string.unknown_geofence_transition);
-        }
+        return TextUtils.join(", ", triggeringGeofencesIdsList);
     }
 
     private void sendNotification(String notificationDetails) {
         // Create an explicit content Intent that starts the main Activity.
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-
+        notificationIntent.putExtra("ID", notificationDetails);
         // Construct a task stack.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
