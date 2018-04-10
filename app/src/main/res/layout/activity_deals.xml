@@ -8,6 +8,8 @@
     android:orientation="vertical"
     tools:context="com.example.sameer.geofencingapp.DealsActivity">
 
+
+
     <TextView
         android:id="@+id/tvID"
         android:layout_width="match_parent"
@@ -20,5 +22,16 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10sp">
+
+    </ListView>
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:onClick="buSearch"
+        android:text="Search the web for additional coupons" />
 </LinearLayout>

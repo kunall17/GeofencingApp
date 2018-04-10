@@ -1,5 +1,6 @@
 package com.example.sameer.geofencingapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -50,6 +51,7 @@ public class DealsActivity extends AppCompatActivity {
             arrayList.add(new Coupon("Coupon 2 ", "DISC50", "get 50% off"));
             arrayList.add(new Coupon("Coupon 3 ", "GETOFF", "get 10% off on order above 1.50 $"));
             arrayList.add(new Coupon("Coupon 4 ", "GOAWAY", "get 1$ cashback"));
+            arrayList.add(new Coupon("Coupon 5 ", "GETGPA", "get extra cgpa"));
         }
         else {
             Toast.makeText(getApplicationContext(),"Wrong ID",Toast.LENGTH_LONG).show();
@@ -57,7 +59,15 @@ public class DealsActivity extends AppCompatActivity {
         myCustomAdapter= new MyCustomAdapter(arrayList);
         listView.setAdapter(myCustomAdapter);
     }
-     class MyCustomAdapter extends BaseAdapter {
+
+    public void buSearch(View view) {
+        String id = getIntent().getStringExtra("ID");
+        Intent intent=new Intent(this,Search.class);
+        intent.putExtra("id",id);
+        startActivity(intent);
+    }
+
+    class MyCustomAdapter extends BaseAdapter {
         public  ArrayList<Coupon>  listnewsDataAdpater ;
 
         public MyCustomAdapter(ArrayList<Coupon>  listnewsDataAdpater) {

@@ -79,8 +79,9 @@
         android:id="@+id/testButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/add_geofence_btn"
-        android:layout_marginStart="26dp"
+        android:layout_alignBaseline="@+id/add_geofence_btn"
+        android:layout_alignBottom="@+id/add_geofence_btn"
+        android:layout_marginStart="29dp"
         android:layout_toEndOf="@+id/add_geofence_btn"
         android:text="Test" />
 
