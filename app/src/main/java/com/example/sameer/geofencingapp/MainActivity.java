@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
         mAddGeofenceButton = (Button) findViewById(R.id.add_geofence_btn);
 
         offers = new ArrayList<>();
-        offers.add(new Offer(13.353014, 74.793609, 300, "AB5"));
-        offers.add(new Offer(13.353014, 74.793609, 123123, "MAC D"));
+        offers.add(new Offer(13.353260, 74.7934509, 300, "Academic Block 5"));
+        offers.add(new Offer(13.3529115, 74.7898083, 300, "Mc Donald's"));
+        offers.add(new Offer(13.353260, 74.7934509, 300, "Kentucky Fried Chicken"));
+
 
         final TextInputEditText xcord = findViewById(R.id.xcord);
         final TextInputEditText ycord = findViewById(R.id.ycord);
