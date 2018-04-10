@@ -12,21 +12,22 @@ import java.util.List;
 
 public class RegisteredActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registered);
 
         ListView list
-                 = findViewById(R.id.listView);
+                = findViewById(R.id.listView);
         sqLiteDatabase = openOrCreateDatabase("kajsda.db", MODE_PRIVATE, null);
         Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM register", null);
         List<String> asd = new ArrayList<String>();
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,asd);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, asd);
         c.moveToFirst();
-        for(int i=0;i<c.getCount();i++) {
-            arrayAdapter.add(c.getString(0));
+        for (int i = 0; i < c.getCount(); i++) {
+            arrayAdapter.add(c.getString(0) + " - " + c.getInt(1));
             c.moveToNext();
         }
         list.setAdapter(arrayAdapter);

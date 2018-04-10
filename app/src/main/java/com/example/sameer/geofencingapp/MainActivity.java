@@ -4,9 +4,11 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sqLiteDatabase = openOrCreateDatabase("kajsda.db", MODE_PRIVATE, null);
-        sqLiteDatabase.execSQL("CREATE TABLE  IF NOT EXISTS  register (name VARCHAR(20));");
+        sqLiteDatabase.execSQL("CREATE TABLE  IF NOT EXISTS  register (name VARCHAR(20) PRIMARY KEY, count INTEGER);");
         mAddGeofenceButton = (Button) findViewById(R.id.add_geofence_btn);
 
         offers = new ArrayList<>();
@@ -148,7 +150,25 @@ public class MainActivity extends AppCompatActivity {
         Offer offer = offers.get(spinner.getSelectedItemPosition());
         mGeofencingClient = LocationServices.getGeofencingClient(this);
         mGeofenceList = new ArrayList<Geofence>();
-        sqLiteDatabase.execSQL("INSERT INTO register VALUES('" + offer.name + "');");
+        int count = 0;
+        Cursor c = sqLiteDatabase.rawQuery("SELECT count FROM register where name='" + offer.name + "';", null);
+        c.moveToFirst();
+        try {
+
+            if (c.getCount() > 0) {
+                count = c.getInt(1) + 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+sqLiteDatabase
+        sqLiteDatabase.execSQL("INSERT INTO register VALUES('" + offer.name + "'," + count + ");");
+        ContentValues cc = new ContentValues();
+        
+        int id = (int) sqLiteDatabase.insertWithOnConflict("register", null, initialValues, SQLiteDatabase.CONFLICT_IGNORE);
+        if (id == -1) {
+            sqLiteDatabase.update("your_table", initialValues, "_id=?", new String[] {"1"});  // number 1 is the _id here, update to variable for your code
+        }
 
         mGeofenceList.add(new Geofence.Builder().setRequestId(offer.name).setCircularRegion(offer.x, offer.y, (float) offer.r).setExpirationDuration(3600000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
 
