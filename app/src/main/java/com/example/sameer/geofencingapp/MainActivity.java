@@ -1,14 +1,20 @@
 package com.example.sameer.geofencingapp;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         offers = new ArrayList<>();
         offers.add(new Offer(13.353014, 74.793609, 300, "AB5"));
-        offers.add(new Offer(13.353014, 74.793609, 300, "MAC D"));
+        offers.add(new Offer(13.353014, 74.793609, 123123, "MAC D"));
 
         final TextInputEditText xcord = findViewById(R.id.xcord);
         final TextInputEditText ycord = findViewById(R.id.ycord);
@@ -87,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 addGeofencing();
+            }
+        });
+
+        Button button = findViewById(R.id.testButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (spinner.getSelectedItem() == null) {
+                    Toast.makeText(MainActivity.this, "Select any spinner item", Toast.LENGTH_SHORT).show();
+                } else {
+                    sendNotification(offers.get(spinner.getSelectedItemPosition()).name);
+                }
             }
         });
     }
@@ -158,4 +176,46 @@ public class MainActivity extends AppCompatActivity {
         return mGeofencePendingIntent;
     }
 
+
+    private void sendNotification(String notificationDetails) {
+        // Create an explicit content Intent that starts the main Activity.
+        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        notificationIntent.putExtra("ID", notificationDetails);
+        // Construct a task stack.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+        // Add the main Activity to the task stack as the parent.
+        stackBuilder.addParentStack(MainActivity.class);
+
+        // Push the content Intent onto the stack.
+        stackBuilder.addNextIntent(notificationIntent);
+
+        // Get a PendingIntent containing the entire back stack.
+        PendingIntent notificationPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Get a notification builder that's compatible with platform versions >= 4
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+        // Define the notification settings.
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground)
+                // In a real app, you may want to use a library like Volley
+                // to decode the Bitmap.
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.ic_launcher_foreground))
+                .setColor(Color.RED)
+                .setContentTitle(notificationDetails)
+                .setContentText(getString(R.string.geofence_transition_notification_text))
+                .setContentIntent(notificationPendingIntent);
+
+        // Dismiss notification once the user touches it.
+        builder.setAutoCancel(true);
+
+        // Get an instance of the Notification manager
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Issue the notification
+        mNotificationManager.notify(0, builder.build());
+    }
 }
