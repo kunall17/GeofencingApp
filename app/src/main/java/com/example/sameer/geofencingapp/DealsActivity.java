@@ -40,7 +40,7 @@ public class DealsActivity extends AppCompatActivity {
             arrayList.add(new Coupon("Coupon 3 ", "GETOFF", "get 10% off on order above 1.50 $"));
             arrayList.add(new Coupon("Coupon 4 ", "GOAWAY", "get 1$ cashback"));
             arrayList.add(new Coupon("Coupon 5 ", "GETGPA", "get extra cgpa"));
-        } else if (id.equalsIgnoreCase("Mc Donald's")) {
+        } else if (id.equalsIgnoreCase("Mc Donalds")) {
             arrayList.add(new Coupon("Coupon 1 ", "kunalRocks", "get 100% off"));
             arrayList.add(new Coupon("Coupon 2 ", "DISC50", "get 50% off"));
             arrayList.add(new Coupon("Coupon 3 ", "GETOFF", "get 10% off on order above 1.50 $"));

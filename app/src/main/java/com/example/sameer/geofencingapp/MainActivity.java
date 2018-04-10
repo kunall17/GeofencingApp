@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         offers = new ArrayList<>();
         offers.add(new Offer(13.353260, 74.7934509, 300, "Academic Block 5"));
-        offers.add(new Offer(13.3529115, 74.7898083, 300, "Mc Donald's"));
+        offers.add(new Offer(13.3529115, 74.7898083, 300, "Mc Donalds"));
         offers.add(new Offer(13.353260, 74.7934509, 300, "Kentucky Fried Chicken"));
 
 
@@ -150,24 +150,25 @@ public class MainActivity extends AppCompatActivity {
         Offer offer = offers.get(spinner.getSelectedItemPosition());
         mGeofencingClient = LocationServices.getGeofencingClient(this);
         mGeofenceList = new ArrayList<Geofence>();
-        int count = 0;
+        int count = 1;
         Cursor c = sqLiteDatabase.rawQuery("SELECT count FROM register where name='" + offer.name + "';", null);
         c.moveToFirst();
         try {
-
             if (c.getCount() > 0) {
-                count = c.getInt(1) + 1;
+                count = c.getInt(0) + 1;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-sqLiteDatabase
-        sqLiteDatabase.execSQL("INSERT INTO register VALUES('" + offer.name + "'," + count + ");");
+//        sqLiteDatabase.execSQL("INSERT INTO register VALUES('" + offer.name + "'," + count + ");");
         ContentValues cc = new ContentValues();
-        
-        int id = (int) sqLiteDatabase.insertWithOnConflict("register", null, initialValues, SQLiteDatabase.CONFLICT_IGNORE);
+        cc.put("name", offer.name);
+        cc.put("count", count);
+
+
+        int id = (int) sqLiteDatabase.insertWithOnConflict("register", null, cc, SQLiteDatabase.CONFLICT_IGNORE);
         if (id == -1) {
-            sqLiteDatabase.update("your_table", initialValues, "_id=?", new String[] {"1"});  // number 1 is the _id here, update to variable for your code
+            sqLiteDatabase.update("register", cc, "name='" + offer.name + "'", null);  // number 1 is the _id here, update to variable for your code
         }
 
         mGeofenceList.add(new Geofence.Builder().setRequestId(offer.name).setCircularRegion(offer.x, offer.y, (float) offer.r).setExpirationDuration(3600000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
