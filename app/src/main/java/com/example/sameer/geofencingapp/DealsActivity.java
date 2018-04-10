@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,23 +27,37 @@ public class DealsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_deals);
 
         String id = getIntent().getStringExtra("ID");
-        textView=findViewById(R.id.tvID);
-        SpannableString content = new SpannableString(""+id);
+        textView = findViewById(R.id.tvID);
+        SpannableString content = new SpannableString("" + id);
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         textView.setText(content);
 
-        listView=findViewById(R.id.listView);
-        if (id.equalsIgnoreCase("Academic Block 5")){
-            arrayList.add(new Coupon("Coupon 1 ","kunalRocks","get 100% off"));
-            arrayList.add(new Coupon("Coupon 2 ","DISC50","kunal will always rock"));
-            arrayList.add(new Coupon("Coupon 3 ","GETOFF","kunal will always rock"));
-            arrayList.add(new Coupon("Coupon 4 ","GOAWAY","kunal will always rock"));
-            arrayList.add(new Coupon("Coupon 5 ","GETGPA","kunal will always rock"));
-
+        listView = findViewById(R.id.listView);
+        if (id.equalsIgnoreCase("Academic Block 5")) {
+            arrayList.add(new Coupon("Coupon 1 ", "kunalRocks", "get 100% off"));
+            arrayList.add(new Coupon("Coupon 2 ", "DISC50", "get 50% off"));
+            arrayList.add(new Coupon("Coupon 3 ", "GETOFF", "get 10% off on order above 1.50 $"));
+            arrayList.add(new Coupon("Coupon 4 ", "GOAWAY", "get 1$ cashback"));
+            arrayList.add(new Coupon("Coupon 5 ", "GETGPA", "get extra cgpa"));
+        } else if (id.equalsIgnoreCase("Mc Donald's")) {
+            arrayList.add(new Coupon("Coupon 1 ", "kunalRocks", "get 100% off"));
+            arrayList.add(new Coupon("Coupon 2 ", "DISC50", "get 50% off"));
+            arrayList.add(new Coupon("Coupon 3 ", "GETOFF", "get 10% off on order above 1.50 $"));
+            arrayList.add(new Coupon("Coupon 4 ", "GOAWAY", "get 1$ cashback"));
+            arrayList.add(new Coupon("Coupon 5 ", "GETGPA", "get extra cgpa"));
+        } else if (id.equalsIgnoreCase("Kentucky Fried Chicken")) {
+            arrayList.add(new Coupon("Coupon 1 ", "kunalRocks", "get 100% off"));
+            arrayList.add(new Coupon("Coupon 2 ", "DISC50", "get 50% off"));
+            arrayList.add(new Coupon("Coupon 3 ", "GETOFF", "get 10% off on order above 1.50 $"));
+            arrayList.add(new Coupon("Coupon 4 ", "GOAWAY", "get 1$ cashback"));
         }
-
+        else {
+            Toast.makeText(getApplicationContext(),"Wrong ID",Toast.LENGTH_LONG).show();
+        }
+        myCustomAdapter= new MyCustomAdapter(arrayList);
+        listView.setAdapter(myCustomAdapter);
     }
-    private class MyCustomAdapter extends BaseAdapter {
+     class MyCustomAdapter extends BaseAdapter {
         public  ArrayList<Coupon>  listnewsDataAdpater ;
 
         public MyCustomAdapter(ArrayList<Coupon>  listnewsDataAdpater) {
