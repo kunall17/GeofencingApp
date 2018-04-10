@@ -7,6 +7,7 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Geofence> mGeofenceList;
     PendingIntent mGeofencePendingIntent;
     Button mAddGeofenceButton;
-
+    SQLiteDatabase sqLiteDatabase;
     Spinner spinner;
     List<Offer> offers;
     ArrayAdapter<String> adapter;
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
 
+        sqLiteDatabase = openOrCreateDatabase("kajsda.db", MODE_PRIVATE, null);
+        sqLiteDatabase.execSQL("CREATE TABLE  IF NOT EXISTS  register (name VARCHAR(20));");
         mAddGeofenceButton = (Button) findViewById(R.id.add_geofence_btn);
 
         offers = new ArrayList<>();
@@ -109,6 +112,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        Button button1 = findViewById(R.id.showRegisterd);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sqLiteDatabase.close();
+                Intent intent = new Intent(MainActivity.this, RegisteredActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sqLiteDatabase = openOrCreateDatabase("kajsda.db", MODE_PRIVATE, null);
+
     }
 
     class Offer {
@@ -129,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
         Offer offer = offers.get(spinner.getSelectedItemPosition());
         mGeofencingClient = LocationServices.getGeofencingClient(this);
         mGeofenceList = new ArrayList<Geofence>();
+        sqLiteDatabase.execSQL("INSERT INTO register VALUES('" + offer.name + "');");
+
         mGeofenceList.add(new Geofence.Builder().setRequestId(offer.name).setCircularRegion(offer.x, offer.y, (float) offer.r).setExpirationDuration(3600000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

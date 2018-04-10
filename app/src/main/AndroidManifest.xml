@@ -3,7 +3,8 @@
     package="com.example.sameer.geofencingapp">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +27,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".DealsActivity" />
-        <activity android:name=".Search"></activity>
+        <activity android:name=".Search" />
+        <activity android:name=".RegisteredActivity"></activity>
     </application>
 
 </manifest>
